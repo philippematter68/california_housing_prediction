@@ -1,0 +1,12 @@
+name: mlops-dev
+channels:
+  - defaults
+dependencies:
+  - cookiecutter
+  - conda-forge::jupyterlab
+  - click
+  - sphinx
+  - coverage
+  - pip
+  - python=3.12.0
+prefix: C:\Users\philo\anaconda3\envs\mlops-dev
