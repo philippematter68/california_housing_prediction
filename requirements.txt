@@ -11,3 +11,5 @@ pandas
 numpy
 scikit-learn
 python-dotenv>=0.5.1
+dill
+logging
