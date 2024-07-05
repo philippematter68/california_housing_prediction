@@ -1,5 +1,10 @@
 # -*- coding: utf-8 -*-
 import logging
+# to access logging information when running the main.py script
+log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+logging.basicConfig(level=logging.INFO, format=log_fmt)
+logger = logging.getLogger(__name__)
+
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 import pandas as pd
@@ -36,7 +41,9 @@ def main(input_filepath, output_filepath):
     logger.info("Writing train-test data done.")
 
 def write_train_test_data(output_filepath, X_train, X_test, y_train, y_test):
+    logger=logging.getLogger(__name__)
     output_paths = generate_train_test_addresses(output_filepath)
+    logger.info(f"Writing train-test data into\n{output_paths}.")
     X_train.to_csv(output_paths['train_feature_path'], index=False)
     X_test.to_csv(output_paths['test_feature_path'], index=False)
     y_train.to_csv(output_paths['train_target_path'], index=False)
@@ -65,14 +72,13 @@ def generate_train_test_addresses(processed_path):
 if __name__ == '__main__':
     log_fmt = '%(asctime)s - %(name)s - %(levelname)s - %(message)s'
     logging.basicConfig(level=logging.INFO, format=log_fmt)
-
     # not used in this stub but often useful for finding various files
     project_dir = Path(__file__).resolve().parents[2]
-
     # find .env automagically by walking up directories until it's found, then
     # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
-
+    logging_level = os.getenv("LOGGING_LEVEL")
+    logging.basicConfig(level=logging_level, format=log_fmt)
     data_path = os.getenv("DATA_PATH")
     processed_path = os.getenv("PROCESSED_PATH")
     main(data_path, processed_path)
