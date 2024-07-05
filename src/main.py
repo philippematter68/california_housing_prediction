@@ -29,7 +29,7 @@ processed_path = os.getenv("PROCESSED_PATH")
 # defines the folder for the model, if it does not exists already.
 model_path = os.getenv("MODEL_PATH")
 if not os.path.exists(model_path):
-    os.makdir(model_path)
+    os.mkdir(model_path)
 model_file_name = model_path + "/LinearRegression.pkl"
 
 make_dataset(data_path, processed_path)
@@ -40,6 +40,7 @@ X_train, X_test, y_train, y_test = read_train_test_data(processed_path)
 sc = StandardScaler()
 lin_reg = LinearRegression()
 pipeline_mlr = Pipeline([("data_scaling", sc), ("estimator", lin_reg)])
+logger.info("\nFitting model on train data...\n")
 # Model Fit
 pipeline_mlr.fit(X_train, y_train)
 logger.debug(f"Saving model as: {model_file_name}")
@@ -48,11 +49,12 @@ with open(model_file_name, "wb") as f:
 # Model Evaluation
 with open(model_file_name, "rb") as f:
     pipeline_mlr = load(f)
+logger.info("\nEvaluating model based on test data...\n")
 predictions_mlr = pipeline_mlr.predict(X_test)
 
 # Test score
 pipeline_mlr.score(X_test, y_test)
-
+logger.info("\nResults of model evaluation:\n")
 logger.info(f"MAE {metrics.mean_absolute_error(y_test, predictions_mlr)}")
 logger.info(f"MSE {metrics.mean_squared_error(y_test, predictions_mlr)}")
 logger.info(f"RMSE {np.sqrt(metrics.mean_squared_error(y_test, predictions_mlr))}")
