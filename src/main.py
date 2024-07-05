@@ -3,6 +3,7 @@ import os
 import dotenv
 from dill import dump, load
 import logging
+logger = logging.getLogger(__name__)
 import numpy as np
 import pandas as pd
 
